@@ -17,18 +17,21 @@ x = x_0
 v = v_0
 t = 0
 
-# enable interactive mode
-plt.ion()
+# # enable interactive mode
+# plt.ion()
 
 # creating subplot and figure
-fig = plt.figure()
-ax = fig.add_subplot(111)
-line1, = ax.plot(t, x)
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# line1, = ax.plot(t, x)
 
-# setting labels
-plt.xlabel("Time (s)")
-plt.ylabel("Position (m)")
-plt.title("Position wrt Time")
+# # setting labels
+# plt.xlabel("Time (s)")
+# plt.ylabel("Position (m)")
+# plt.title("Position wrt Time")
+
+fig, ax = plt.subplots()
+
 
 for t in range(int(t_f/dt)):
     # x = x_0 + v_0*t + 0.5*a*t**2
@@ -42,16 +45,20 @@ for t in range(int(t_f/dt)):
     x += v*dt
     t += dt
 
-    # updating the value of x and y
-    line1.set_xdata(t)
-    line1.set_ydata(x)
+    # # updating the value of x and y
+    # line1.set_xdata(t)
+    # line1.set_ydata(x)
 
-    # re-drawing the figure
-    fig.canvas.draw()
+    # # re-drawing the figure
+    # fig.canvas.draw()
 
-    # to flush the GUI events
-    fig.canvas.flush_events()
-    # time.sleep(0.1)
+    # # to flush the GUI events
+    # fig.canvas.flush_events()
+    # # time.sleep(0.1)
+
+    ax.plot(t, x, color='red')
+    fig.show()
+
 
     print(f'Position is: {x} m')
     print(f'Velocity is: {v} m/s')
