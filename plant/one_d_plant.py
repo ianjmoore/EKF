@@ -2,35 +2,32 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
+# # parameters
+p_0 = 0         # initial pos (m)
+v_0 = 1         # initial vel (m/s)
+a = float(0.1)  # accel (m/s**2)
+dt = float(1)   # delta time (s)
+t_f = 10        # time final (s)
 
-## parameters
-
-x_0 = 0 # initial pos (m)
-v_0 = 1 # initial vel (m/s)
-a   = float(0.1) # accel (m/s**2)
-dt  = float(0.01) # delta time (s)
-
-t_f = 10 # time final (s)
-
-## state initialization
-x = x_0
+# # state initialization
+p = p_0
 v = v_0
-t = 0
-
-# # enable interactive mode
-# plt.ion()
+t_0 = 0
+t = np.arange(t_0, t_f, dt)
+p = np.zeros(shape=t)
+# enable interactive mode
+plt.ion()
 
 # creating subplot and figure
-# fig = plt.figure()
-# ax = fig.add_subplot(111)
-# line1, = ax.plot(t, x)
+figure, ax = plt.subplots(figsize=(10, 8))
+line1, = ax.plot(t, p)
 
-# # setting labels
-# plt.xlabel("Time (s)")
-# plt.ylabel("Position (m)")
-# plt.title("Position wrt Time")
+# setting labels
+plt.xlabel("Time (s)")
+plt.ylabel("Position (m)")
+plt.title("Position wrt Time")
 
-fig, ax = plt.subplots()
+# fig, ax = plt.subplots()
 
 
 for t in range(int(t_f/dt)):
@@ -42,26 +39,31 @@ for t in range(int(t_f/dt)):
         # Discrete time causes errors due to non-time constant errors.
         # Decreasing dt will help mitigate these errors
     v += a*dt
-    x += v*dt
+    # x += v*dt
+    p += v*dt
     t += dt
 
-    # # updating the value of x and y
-    # line1.set_xdata(t)
-    # line1.set_ydata(x)
+    # updating the value of x and y
+    # line1, = ax.plot(t, x)
 
-    # # re-drawing the figure
-    # fig.canvas.draw()
+    line1.set_xdata(t)
+    line1.set_ydata(p)
 
-    # # to flush the GUI events
-    # fig.canvas.flush_events()
-    # # time.sleep(0.1)
+    # re-drawing the figure
+    figure.canvas.draw()
 
-    ax.plot(t, x, color='red')
-    fig.show()
+    # to flush the GUI events
+    figure.canvas.flush_events()
+    time.sleep(0.1)
+
+    # ax.plot(t, x, color='red')
 
 
-    print(f'Position is: {x} m')
-    print(f'Velocity is: {v} m/s')
+    # print(f'Position is: {x} m')
+    # print(f'Velocity is: {v} m/s')
+
+# plt.plot(t, x, color='red')
+# plt.show()
 
 
 '''
