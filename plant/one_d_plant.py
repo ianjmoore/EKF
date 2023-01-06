@@ -1,26 +1,31 @@
 import numpy as np
-import time
 import matplotlib.pyplot as plt
 
 # # parameters
-p_0 = 0         # initial pos (m)
-v_0 = 1         # initial vel (m/s)
-a = float(0.1)  # accel (m/s**2)
+p_0 = float(0)  # initial pos (m)
+v_0 = float(0)  # initial vel (m/s)
+t_0 = float(0)  # initial time (s)
+a = float(1)    # accel (m/s**2)
 dt = float(1)   # delta time (s)
 t_f = 10        # time final (s)
 
-# # state initialization
-p = p_0
-v = v_0
-t_0 = 0
 t = np.arange(t_0, t_f, dt)
-p = np.zeros(shape=t)
-# enable interactive mode
-plt.ion()
+p = np.zeros(t.shape)
+v = np.zeros(t.shape)
+a = np.full_like(t, a)
+
+# # state initialization
+p[0] = p_0
+v[0] = v_0
+t[0] = t_0
+domain = len(t)
+
+# # enable interactive mode
+# plt.ion()
 
 # creating subplot and figure
-figure, ax = plt.subplots(figsize=(10, 8))
-line1, = ax.plot(t, p)
+# figure, ax = plt.subplots(111)
+# line1, = ax.plot(t, p)
 
 # setting labels
 plt.xlabel("Time (s)")
@@ -30,7 +35,7 @@ plt.title("Position wrt Time")
 # fig, ax = plt.subplots()
 
 
-for t in range(int(t_f/dt)):
+for i in range(domain):
     # x = x_0 + v_0*t + 0.5*a*t**2
     # v = a*t + v_0
     # x = v*t + x_0
@@ -38,23 +43,27 @@ for t in range(int(t_f/dt)):
     ## Forward Euler Discrete Time Integration
         # Discrete time causes errors due to non-time constant errors.
         # Decreasing dt will help mitigate these errors
-    v += a*dt
-    # x += v*dt
-    p += v*dt
-    t += dt
-
+    # v += a*dt
+    # p += v*dt
+    # t += dt
+    if i == 9:
+        break
+    else:
+        v[i+1] = v[i] + a[i]*dt
+        p[i+1] = p[i] + v[i]*dt
+        t[i+1] = t[i] + dt
     # updating the value of x and y
     # line1, = ax.plot(t, x)
 
-    line1.set_xdata(t)
-    line1.set_ydata(p)
+    # line1.set_xdata(t)
+    # line1.set_ydata(p)
 
     # re-drawing the figure
-    figure.canvas.draw()
+    # figure.canvas.draw()
 
     # to flush the GUI events
-    figure.canvas.flush_events()
-    time.sleep(0.1)
+    # figure.canvas.flush_events()
+    # time.sleep(0.1)
 
     # ax.plot(t, x, color='red')
 
@@ -62,8 +71,10 @@ for t in range(int(t_f/dt)):
     # print(f'Position is: {x} m')
     # print(f'Velocity is: {v} m/s')
 
-# plt.plot(t, x, color='red')
-# plt.show()
+plt.plot(t, p, color='black')
+plt.plot(t, v, color='green')
+plt.plot(t, a, color='gold')
+plt.show()
 
 
 '''
