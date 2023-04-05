@@ -38,8 +38,8 @@ p_0 = float(0)  # initial pos (m)
 v_0 = float(0)  # initial vel (m/s)
 t_0 = float(0)  # initial time (s)
 a_0 = float(1)  # accel (m/s**2)
-dt = float(0.1) # delta time (s)
-t_f = 10        # time final (s)
+dt = float(0.1)  # delta time (s)
+t_f = 10  # time final (s)
 
 # Initializing arrays
 t = np.arange(t_0, t_f, dt)
@@ -55,28 +55,51 @@ t[0] = t_0
 domain = len(t)
 
 # # Forward Euler Discrete Time Integration
-    # Discrete time causes errors due to non-time constant errors. Decreasing dt will help mitigate
+# Discrete time causes errors due to non-time constant errors. Decreasing dt will help mitigate
 for i in range(domain):
     # x = x_0 + v_0*t + 0.5*a*t**2
     # v = a*t + v_0
     # x = v*t + x_0
 
-        # v += a*dt
-        # p += v*dt
-        # t += dt
+    # v += a*dt
+    # p += v*dt
+    # t += dt
 
     if i == (domain - 1):
         break
     else:
-        v[i+1] = v[i] + a[i]*dt
-        p[i+1] = p[i] + v[i]*dt
-        t[i+1] = t[i] + dt
+        v[i + 1] = v[i] + a[i] * dt
+        p[i + 1] = p[i] + v[i] * dt
+        t[i + 1] = t[i] + dt
+
+# 2. Sensor Model: radar meas model
+#     place wall at some x pos
+#     param (x val)
+#     sample rate of radar (multiple of dt: 1s)
+#     truth + noise
+wall = 10  # Assign wall an x position
+sr = 1  # sample rate in seconds
+noise = np.random.normal(wall, 0.1)
+
+
+def radar_samp(wall):
+    return wall + noise
+
+
+# 3. Sensor Model: add accel + noise
+#     add 2 other plots:
+#         accel + (truth + noise) (in comparison vs ln 21 accel)
+#         radar dist (truth, and truth + noise)
+a_noise = np.random.normal(0, 0.5, a.shape)
+a_tpn = np.add(a, a_noise)
+# print(a_tpn)
 
 # # Plotting
 plt.xlabel("Time (s)")
 plt.title("State wrt Time")
 plt.plot(t, p, color='black', label="Position (m)")
 plt.plot(t, v, color='green', label="Velocity (m/s)")
-plt.plot(t, a, color='gold',  label="Acceleration (m/s^2)")
+plt.plot(t, a, color='gold', label="Acceleration (m/s^2)")
+plt.plot(t, a_tpn, color='blue', label="Accel truth + noise (m/s^2)")
 plt.legend(loc="upper left")
 plt.show()
